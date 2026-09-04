@@ -10,8 +10,18 @@ if (!file_exists(__DIR__ . '/database/database.sqlite')) {
     touch(__DIR__ . '/database/database.sqlite');
 }
 if (!getenv('APP_KEY') && !isset($_ENV['APP_KEY'])) {
-    putenv('APP_KEY=base64:7XW0vXQFQ25jZ3VPQWxRZ0g5R2dvbE95cU5oT212S0VrZ1k=');
-    $_ENV['APP_KEY'] = 'base64:7XW0vXQFQ25jZ3VPQWxRZ0g5R2dvbE95cU5oT212S0VrZ1k=';
+    $appKey = null;
+    if (is_file(__DIR__ . '/.env')) {
+        foreach (file(__DIR__ . '/.env', FILE_IGNORE_NEW_LINES) as $line) {
+            if (str_starts_with($line, 'APP_KEY=')) {
+                $appKey = substr($line, 8);
+                break;
+            }
+        }
+    }
+    $appKey = $appKey ?: ('base64:' . base64_encode(random_bytes(32)));
+    putenv('APP_KEY=' . $appKey);
+    $_ENV['APP_KEY'] = $appKey;
 }
 putenv('DB_CONNECTION=sqlite');
 putenv('DB_DATABASE=' . __DIR__ . '/database/database.sqlite');

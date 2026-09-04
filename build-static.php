@@ -5,6 +5,18 @@
  * Output: docs/index.html + docs/build/ assets
  */
 
+// Use SQLite and array drivers for static build (no MySQL needed)
+putenv('DB_CONNECTION=sqlite');
+putenv('DB_DATABASE=' . __DIR__ . '/database/database.sqlite');
+putenv('SESSION_DRIVER=array');
+putenv('CACHE_STORE=array');
+putenv('QUEUE_CONNECTION=array');
+$_ENV['DB_CONNECTION'] = 'sqlite';
+$_ENV['DB_DATABASE'] = __DIR__ . '/database/database.sqlite';
+$_ENV['SESSION_DRIVER'] = 'array';
+$_ENV['CACHE_STORE'] = 'array';
+$_ENV['QUEUE_CONNECTION'] = 'array';
+
 // Bootstrap Laravel
 require __DIR__ . '/vendor/autoload.php';
 $app = require_once __DIR__ . '/bootstrap/app.php';
@@ -14,6 +26,10 @@ $response = $kernel->handle(
 );
 
 $html = $response->getContent();
+
+// Debug: dump first asset URL pattern
+preg_match_all('#(src|href)="([^"]*build[^"]*)"#', $html, $debugMatches);
+file_put_contents(__DIR__ . '/debug-urls.txt', print_r(array_slice($debugMatches[2], 0, 5), true));
 
 // Create docs directory
 $docsDir = __DIR__ . '/docs';
@@ -31,10 +47,15 @@ $html = str_replace(
 // Fix canonical and OG URLs for GitHub Pages
 $ghPagesUrl = 'https://ibrahimkhalif5.github.io/ibrahim-khalif-portfolio';
 $html = str_replace('https://yourdomain.com', $ghPagesUrl, $html);
-// Fix localhost asset URLs (OG image, favicon, etc.)
-$html = preg_replace('#http://localhost:\d+/images/#', $ghPagesUrl . '/images/', $html);
-$html = preg_replace('#http://localhost:\d+/favicon#', $ghPagesUrl . '/favicon', $html);
-$html = preg_replace('#http://localhost:\d+/apple-touch#', $ghPagesUrl . '/apple-touch', $html);
+$html = str_replace('http://yourdomain.com', $ghPagesUrl, $html);
+
+// Rewrite all localhost/CLI-generated asset URLs to relative paths
+$html = preg_replace('#https?://[^/"\'<>\s]*/build/#', 'build/', $html);
+// Rewrite CLI-generated local URLs to GitHub Pages absolute URLs
+$html = preg_replace('#https?://[^/"\'<>\s]*/images/#', $ghPagesUrl . '/images/', $html);
+$html = preg_replace('#https?://[^/"\'<>\s]*/favicon#', $ghPagesUrl . '/favicon', $html);
+$html = preg_replace('#https?://[^/"\'<>\s]*/apple-touch#', $ghPagesUrl . '/apple-touch', $html);
+$html = preg_replace('#https?://[^/"\'<>\s]*/Ibrahim-Khalif-Ali-Resume\.pdf#', $ghPagesUrl . '/Ibrahim-Khalif-Ali-Resume.pdf', $html);
 
 // Write index.html
 file_put_contents($docsDir . '/index.html', $html);
@@ -122,7 +143,7 @@ function deleteDir($dir) {
 
 function globRecursive($dir) {
     $results = [];
-    foreach (RecursiveIteratorIterator(
+    foreach (new RecursiveIteratorIterator(
         new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS)
     ) as $file) {
         if ($file->isFile()) {

@@ -58,6 +58,7 @@ ol.steps li{margin-bottom:6px}
       <label for="token">Fine-grained personal access token</label>
       <input type="password" id="token" placeholder="github_pat_...">
       <button id="saveToken">Save token</button>
+      <button id="testToken">Test token</button>
       <button id="clearToken" class="button-danger">Clear</button>
       <ol class="steps" style="margin-top:14px">
         <li>GitHub → Settings → Developer settings → <b>Fine-grained tokens</b> → Generate new token.</li>
@@ -175,6 +176,14 @@ ol.steps li{margin-bottom:6px}
 
   function slugify(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''); }
 
+  function describeError(r) {
+    let msg = 'HTTP ' + r.status + ' ' + r.statusText;
+    return r.json().then(function (b) {
+      if (b && b.message) { msg = (b.message || ''); if (b.status) msg += ' — ' + b.status; }
+      return msg;
+    }).catch(function () { return msg; });
+  }
+
   // unlock
   document.getElementById('unlockBtn').addEventListener('click', function () {
     if (document.getElementById('pw').value === 'ibrahim2024') {
@@ -210,6 +219,36 @@ ol.steps li{margin-bottom:6px}
     show(document.getElementById('tokenStatus'), 'Saved token cleared.', 'ok');
   });
 
+  document.getElementById('testToken').addEventListener('click', function () {
+    const ts = document.getElementById('tokenStatus');
+    const t = document.getElementById('token').value.trim();
+    if (!t) { show(ts, 'Enter a token first, then click Test token.', 'err'); return; }
+    show(ts, 'Testing token…', 'busy');
+    fetch('https://api.github.com/user', {
+      headers: { 'Authorization': 'token ' + t, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' }
+    }).then(function (r) {
+      if (!r.ok) { show(ts, 'Token is invalid (HTTP ' + r.status + '). Regenerate it, or check it was copied fully.', 'err'); return null; }
+      return r.json();
+    }).then(function (who) {
+      if (!who) return;
+      return fetch(repoBase + '/contents/public', {
+        headers: { 'Authorization': 'token ' + t, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' }
+      }).then(function (r) {
+        const accepted = r.headers.get('X-Accepted-GitHub-Permissions') || 'none';
+        const oauthScopes = r.headers.get('X-OAuth-Scopes') || '';
+        const fineGrainedWrite = /contents=write/.test(accepted);
+        const classicWrite = /(repo|public_repo)/.test(oauthScopes);
+        const canWrite = fineGrainedWrite || classicWrite;
+        if (!r.ok) {
+          return describeError(r).then(function (m) {
+            show(ts, 'Token is valid for "' + who.login + '" but this repo is NOT accessible — check Repository access. (' + m + ')', 'err');
+          });
+        }
+        show(ts, 'Token works! Authenticated as ' + who.login + '. GitHub reports Contents: ' + (canWrite ? 'Read & write — you are ready to upload.' : 'Read-only or scopes missing — ' + (oauthScopes ? 'scopes: ' + oauthScopes + '. ' : '') + 'set Contents to "Read and write" (fine-grained) or use a classic token with the repo/public_repo scope.') + ' (permission header: ' + accepted + ')', canWrite ? 'ok' : 'err');
+      });
+    }).catch(function (e) { show(ts, 'Test failed: ' + e.message, 'err'); });
+  });
+
   // populate project dropdown
   const select = document.getElementById('project');
   PROJECTS.forEach(function (p) {
@@ -235,7 +274,9 @@ ol.steps li{margin-bottom:6px}
     uploadFile('public/' + name, file).then(function (r) {
       btn.disabled = false;
       if (r.ok) { show(cvStatus, 'Résumé uploaded! The site rebuilds automatically (~2 min).', 'ok'); }
-      else { show(cvStatus, 'Upload failed: HTTP ' + r.status + ' ' + r.statusText + '. Check that your token has Contents: Read and write permission on the repo.', 'err'); }
+      else {
+        describeError(r).then(function (m) { show(cvStatus, 'Upload failed: ' + m + '. Check that your token has Contents: Read and write permission on the repo.', 'err'); });
+      }
     }).catch(function (e) { btn.disabled = false; show(cvStatus, 'Upload error: ' + e.message, 'err'); });
   });
 
@@ -256,7 +297,9 @@ ol.steps li{margin-bottom:6px}
     uploadFile(path, file).then(function (r) {
       btn.disabled = false;
       if (r.ok) { show(shotStatus, 'Screenshot uploaded for: ' + project + '. The site rebuilds automatically (~2 min).', 'ok'); }
-      else { show(shotStatus, 'Upload failed: HTTP ' + r.status + ' ' + r.statusText + '. Check that your token has Contents: Read and write permission on the repo.', 'err'); }
+      else {
+        describeError(r).then(function (m) { show(shotStatus, 'Upload failed: ' + m + '. Check that your token has Contents: Read and write permission on the repo.', 'err'); });
+      }
     }).catch(function (e) { btn.disabled = false; show(shotStatus, 'Upload error: ' + e.message, 'err'); });
   });
 })();

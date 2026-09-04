@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ibrahimkhalif5.github.io/ibrahim-khalif-portfolio/sitemap.xml

@@ -8,14 +8,26 @@
         {{-- Featured projects --}}
         @foreach(config('portfolio.projects.items') as $project)
             @if($project['featured'])
+                @php
+                    $projectScreenshot = $project['screenshot'] ?? null;
+                    if (!$projectScreenshot) {
+                        $projectSlug = Illuminate\Support\Str::slug($project['title'], '-');
+                        foreach (['png', 'jpg', 'jpeg', 'webp', 'gif'] as $ext) {
+                            if (file_exists(public_path("images/projects/{$projectSlug}.{$ext}"))) {
+                                $projectScreenshot = "images/projects/{$projectSlug}.{$ext}";
+                                break;
+                            }
+                        }
+                    }
+                @endphp
                 <div class="project-featured reveal">
                     <div class="grid md:grid-cols-5 gap-0">
 
                         {{-- Screenshot area --}}
                         <div class="md:col-span-3 project-screenshot-area">
-                            @if($project['screenshot'])
+                            @if($projectScreenshot)
                                 <img
-                                    src="{{ asset($project['screenshot']) }}"
+                                    src="{{ asset($projectScreenshot) }}"
                                     alt="{{ $project['title'] }} screenshot"
                                     class="w-full h-full object-cover"
                                     loading="lazy"

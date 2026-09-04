@@ -83,10 +83,20 @@ ol.steps li{margin-bottom:6px}
       <h2><span class="step-num">2</span> · project screenshots</h2>
       <label for="project">Project</label>
       <select id="project"></select>
-      <label for="shot">Screenshot image (PNG / JPG / WebP)</label>
-      <input type="file" id="shot" accept="image/*">
-      <button id="uploadShot">Upload screenshot</button>
-      <div id="shotStatus" class="status"></div>
+
+      <div style="border-top:1px solid rgba(255,255,255,.08);margin:14px 0 14px;padding-top:14px">
+        <label for="shot"><b style="color:var(--text)">Main screenshot</b> (replaces the current one)</label>
+        <input type="file" id="shot" accept="image/*">
+        <button id="uploadShot">Upload main screenshot</button>
+        <div id="shotStatus" class="status"></div>
+      </div>
+
+      <div style="border-top:1px dashed rgba(255,255,255,.12);margin:6px 0 0;padding-top:14px">
+        <label for="shot2"><b style="color:var(--text)">Add another image</b> (keeps existing ones — great for Teno Care)</label>
+        <input type="file" id="shot2" accept="image/*">
+        <button id="uploadShot2">Add another image</button>
+        <div id="shot2Status" class="status"></div>
+      </div>
     </div>
 
     <div class="card">
@@ -301,6 +311,49 @@ ol.steps li{margin-bottom:6px}
         describeError(r).then(function (m) { show(shotStatus, 'Upload failed: ' + m + '. Check that your token has Contents: Read and write permission on the repo.', 'err'); });
       }
     }).catch(function (e) { btn.disabled = false; show(shotStatus, 'Upload error: ' + e.message, 'err'); });
+  });
+
+  // Add another image for a project
+  function listDir(path) {
+    return fetch(repoBase + '/contents/' + path, {
+      method: 'GET',
+      headers: { 'Authorization': 'token ' + token(), 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' }
+    }).then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; });
+  }
+
+  function nextImageNumber(slug) {
+    return listDir('public/images/projects').then(function (files) {
+      const re = new RegExp('^' + slug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '-(\\d+)\\.(png|jpe?g|webp|gif)$', 'i');
+      let max = 0;
+      files.forEach(function (f) { const m = f.name.match(re); if (m) max = Math.max(max, parseInt(m[1], 10)); });
+      return max + 1;
+    });
+  }
+
+  document.getElementById('uploadShot2').addEventListener('click', function () {
+    const shot2Status = document.getElementById('shot2Status');
+    const file = document.getElementById('shot2').files[0];
+    const project = document.getElementById('project').value;
+    if (!file) { show(shot2Status, 'Choose an image file first, then click Add another image.', 'err'); return; }
+    if (!token()) { show(shot2Status, 'Step 0 first: save your GitHub token above, then retry.', 'err'); return; }
+
+    const slug = slugify(project);
+    const ext = (file.name.match(/\.([a-zA-Z0-9]+)$/) || [,'png'])[1].toLowerCase();
+
+    const btn = this;
+    btn.disabled = true;
+    show(shot2Status, 'Preparing next slot…', 'busy');
+    nextImageNumber(slug).then(function (n) {
+      const path = 'public/images/projects/' + slug + '-' + n + '.' + ext;
+      show(shot2Status, 'Uploading image #' + n + ' for ' + project + '…', 'busy');
+      return uploadFile(path, file).then(function (r) {
+        btn.disabled = false;
+        if (r.ok) { show(shot2Status, 'Image #' + n + ' added for ' + project + '. The site rebuilds automatically (~2 min).', 'ok'); }
+        else {
+          describeError(r).then(function (m) { show(shot2Status, 'Upload failed: ' + m + '. Check that your token has Contents: Read and write permission on the repo.', 'err'); });
+        }
+      });
+    }).catch(function (e) { btn.disabled = false; show(shot2Status, 'Upload error: ' + e.message, 'err'); });
   });
 })();
 </script>

@@ -5,20 +5,33 @@
             {{ config('portfolio.projects.lead') }}
         </p>
 
+        @php
+            $projectGalleries = [];
+            $projectImagesDir = public_path('images/projects');
+            if (is_dir($projectImagesDir)) {
+                $projectImageFiles = scandir($projectImagesDir) ?: [];
+                foreach (config('portfolio.projects.items') as $gProject) {
+                    $gSlug = Illuminate\Support\Str::slug($gProject['title'], '-');
+                    $gFound = [];
+                    foreach ($projectImageFiles as $gFile) {
+                        if (preg_match('/^' . preg_quote($gSlug, '/') . '(-(\d+))?\.(png|jpe?g|webp|gif)$/i', $gFile, $gMatches)) {
+                            $gIndex = ($gMatches[2] !== '') ? (int)$gMatches[2] : 0;
+                            $gFound[$gIndex] = 'images/projects/' . $gFile;
+                        }
+                    }
+                    ksort($gFound);
+                    $projectGalleries[$gSlug] = array_values($gFound);
+                }
+            }
+        @endphp
+
         {{-- Featured projects --}}
         @foreach(config('portfolio.projects.items') as $project)
             @if($project['featured'])
                 @php
-                    $projectScreenshot = $project['screenshot'] ?? null;
-                    if (!$projectScreenshot) {
-                        $projectSlug = Illuminate\Support\Str::slug($project['title'], '-');
-                        foreach (['png', 'jpg', 'jpeg', 'webp', 'gif'] as $ext) {
-                            if (file_exists(public_path("images/projects/{$projectSlug}.{$ext}"))) {
-                                $projectScreenshot = "images/projects/{$projectSlug}.{$ext}";
-                                break;
-                            }
-                        }
-                    }
+                    $projectSlug = Illuminate\Support\Str::slug($project['title'], '-');
+                    $projectImages = $projectGalleries[$projectSlug] ?? [];
+                    $projectScreenshot = $project['screenshot'] ?? ($projectImages[0] ?? null);
                 @endphp
                 <div class="project-featured reveal">
                     <div class="grid md:grid-cols-5 gap-0">
@@ -26,12 +39,39 @@
                         {{-- Screenshot area --}}
                         <div class="md:col-span-3 project-screenshot-area">
                             @if($projectScreenshot)
-                                <img
-                                    src="{{ asset($projectScreenshot) }}"
-                                    alt="{{ $project['title'] }} screenshot"
-                                    class="w-full h-full object-cover"
-                                    loading="lazy"
-                                />
+                                <div class="gallery w-full">
+                                    <button type="button" class="gallery-main-btn w-full" data-gallery-open="{{ $loop->index }}" aria-label="Open {{ $project['title'] }} screenshots">
+                                        <img
+                                            src="{{ asset($projectImages[0]) }}"
+                                            alt="{{ $project['title'] }} screenshot"
+                                            class="w-full aspect-[16/10] md:aspect-[4/3] object-cover gallery-main"
+                                            data-full="{{ asset($projectImages[0]) }}"
+                                            loading="lazy"
+                                        />
+                                    </button>
+                                    @if(count($projectImages) > 1)
+                                        <div class="gallery-strip">
+                                            @foreach($projectImages as $pIndex => $pImage)
+                                                <button
+                                                    type="button"
+                                                    class="gallery-thumb-btn {{ $pIndex === 0 ? 'active' : '' }}"
+                                                    data-gallery-open="{{ $loop->parent->index }}"
+                                                    data-index="{{ $pIndex }}"
+                                                    aria-label="View screenshot {{ $pIndex + 1 }} of {{ $project['title'] }}"
+                                                >
+                                                    <img
+                                                        src="{{ asset($pImage) }}"
+                                                        alt=""
+                                                        class="gallery-thumb {{ $pIndex === 0 ? 'active' : '' }}"
+                                                        data-full="{{ asset($pImage) }}"
+                                                        data-index="{{ $pIndex }}"
+                                                        loading="lazy"
+                                                    />
+                                                </button>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
                             @else
                                 <div class="w-full h-full flex items-center justify-center">
                                     <div class="text-center project-screenshot-hint">
@@ -104,8 +144,48 @@
         <div class="grid md:grid-cols-2 gap-4">
             @foreach(config('portfolio.projects.items') as $project)
                 @if(!$project['featured'])
+                    @php
+                        $projectSlug = Illuminate\Support\Str::slug($project['title'], '-');
+                        $projectImages = $projectGalleries[$projectSlug] ?? [];
+                    @endphp
                     <div class="project-card reveal">
                         <div>
+                            @if(count($projectImages))
+                                <div class="gallery w-full mb-4">
+                                    <button type="button" class="gallery-main-btn w-full" data-gallery-open="{{ $loop->index }}" aria-label="Open {{ $project['title'] }} screenshots">
+                                        <img
+                                            src="{{ asset($projectImages[0]) }}"
+                                            alt="{{ $project['title'] }} screenshot"
+                                            class="w-full aspect-[16/9] object-cover rounded gallery-main"
+                                            data-full="{{ asset($projectImages[0]) }}"
+                                            loading="lazy"
+                                        />
+                                    </button>
+                                    @if(count($projectImages) > 1)
+                                        <div class="gallery-strip">
+                                            @foreach($projectImages as $pIndex => $pImage)
+                                                <button
+                                                    type="button"
+                                                    class="gallery-thumb-btn {{ $pIndex === 0 ? 'active' : '' }}"
+                                                    data-gallery-open="{{ $loop->parent->index }}"
+                                                    data-index="{{ $pIndex }}"
+                                                    aria-label="View screenshot {{ $pIndex + 1 }} of {{ $project['title'] }}"
+                                                >
+                                                    <img
+                                                        src="{{ asset($pImage) }}"
+                                                        alt=""
+                                                        class="gallery-thumb {{ $pIndex === 0 ? 'active' : '' }}"
+                                                        data-full="{{ asset($pImage) }}"
+                                                        data-index="{{ $pIndex }}"
+                                                        loading="lazy"
+                                                    />
+                                                </button>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
+                            @endif
+
                             <span class="project-category-label mb-3">{{ $project['category'] }}</span>
 
                             <h3 class="text-lg font-bold text-text-primary mt-3 mb-2">

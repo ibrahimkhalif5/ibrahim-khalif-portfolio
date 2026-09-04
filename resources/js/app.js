@@ -117,4 +117,109 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // Project gallery lightbox
+    const galleries = document.querySelectorAll('.gallery');
+    if (galleries.length) {
+        let lightbox = null;
+        let currentImages = [];
+        let currentIndex = 0;
+
+        function closeLightbox() {
+            lightbox.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function render() {
+            const imgEl = lightbox.querySelector('.lightbox-image');
+            imgEl.src = currentImages[currentIndex];
+            const thumbs = galleries;
+            const captionEl = lightbox.querySelector('.lightbox-caption');
+            captionEl.textContent = (currentIndex + 1) + ' / ' + currentImages.length;
+        }
+
+        function openAt(btn) {
+            if (!lightbox) {
+                lightbox = document.createElement('div');
+                lightbox.className = 'lightbox';
+
+                const figure = document.createElement('div');
+                figure.className = 'lightbox-figure';
+
+                const image = document.createElement('img');
+                image.className = 'lightbox-image';
+                image.alt = 'Project screenshot';
+
+                const caption = document.createElement('span');
+                caption.className = 'lightbox-caption';
+
+                figure.appendChild(image);
+                figure.appendChild(caption);
+
+                const prev = document.createElement('button');
+                prev.className = 'lightbox-nav lightbox-prev';
+                prev.type = 'button';
+                prev.setAttribute('aria-label', 'Previous image');
+                prev.textContent = '‹';
+                prev.addEventListener('click', () => {
+                    currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+                    render();
+                });
+
+                const next = document.createElement('button');
+                next.className = 'lightbox-nav lightbox-next';
+                next.type = 'button';
+                next.setAttribute('aria-label', 'Next image');
+                next.textContent = '›';
+                next.addEventListener('click', () => {
+                    currentIndex = (currentIndex + 1) % currentImages.length;
+                    render();
+                });
+
+                const close = document.createElement('button');
+                close.className = 'lightbox-close';
+                close.type = 'button';
+                close.setAttribute('aria-label', 'Close viewer');
+                close.textContent = '×';
+                close.addEventListener('click', closeLightbox);
+
+                lightbox.appendChild(figure);
+                lightbox.appendChild(prev);
+                lightbox.appendChild(next);
+                lightbox.appendChild(close);
+
+                lightbox.addEventListener('click', (e) => {
+                    if (e.target === lightbox) closeLightbox();
+                });
+
+                document.body.appendChild(lightbox);
+            }
+
+            currentImages = [...btn.closest('.gallery').querySelectorAll('img[data-full]')].map(img => img.getAttribute('data-full'));
+
+            const explicitIndex = btn.hasAttribute('data-index') ? parseInt(btn.getAttribute('data-index'), 10) : 0;
+            currentIndex = currentImages.length ? Math.min(explicitIndex, currentImages.length - 1) : 0;
+
+            render();
+            lightbox.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        document.querySelectorAll('[data-gallery-open]').forEach(btn => {
+            btn.addEventListener('click', () => openAt(btn));
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (!lightbox || !lightbox.classList.contains('open')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') {
+                currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+                render();
+            }
+            if (e.key === 'ArrowRight') {
+                currentIndex = (currentIndex + 1) % currentImages.length;
+                render();
+            }
+        });
+    }
 });

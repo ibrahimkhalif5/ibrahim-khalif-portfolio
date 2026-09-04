@@ -81,13 +81,14 @@ if (is_dir($buildDest)) {
 }
 copyDir($buildSource, $buildDest);
 
-// Copy images
+// Copy images (rebuild cleanly so deleted files disappear from the live site)
 $imagesSource = __DIR__ . '/public/images';
 if (is_dir($imagesSource)) {
     $imagesDest = $docsDir . '/images';
-    if (!is_dir($imagesDest)) {
-        mkdir($imagesDest, 0755, true);
+    if (is_dir($imagesDest)) {
+        deleteDir($imagesDest);
     }
+    mkdir($imagesDest, 0755, true);
     copyDir($imagesSource, $imagesDest);
 }
 
@@ -97,6 +98,12 @@ foreach (['favicon.svg', 'favicon.ico', 'apple-touch-icon.png'] as $file) {
     if (file_exists($src)) {
         copy($src, $docsDir . '/' . $file);
     }
+}
+
+// Copy résumé PDF (so the resume link works on the live site)
+$resumeSource = __DIR__ . '/public/Ibrahim-Khalif-Ali-Resume.pdf';
+if (file_exists($resumeSource)) {
+    copy($resumeSource, $docsDir . '/Ibrahim-Khalif-Ali-Resume.pdf');
 }
 
 // Copy robots.txt

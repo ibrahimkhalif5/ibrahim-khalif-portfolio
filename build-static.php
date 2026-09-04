@@ -27,10 +27,6 @@ $response = $kernel->handle(
 
 $html = $response->getContent();
 
-// Debug: dump first asset URL pattern
-preg_match_all('#(src|href)="([^"]*build[^"]*)"#', $html, $debugMatches);
-file_put_contents(__DIR__ . '/debug-urls.txt', print_r(array_slice($debugMatches[2], 0, 5), true));
-
 // Create docs directory
 $docsDir = __DIR__ . '/docs';
 if (!is_dir($docsDir)) {

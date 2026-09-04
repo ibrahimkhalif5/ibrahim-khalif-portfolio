@@ -6,6 +6,13 @@
  */
 
 // Use SQLite and array drivers for static build (no MySQL needed)
+if (!file_exists(__DIR__ . '/database/database.sqlite')) {
+    touch(__DIR__ . '/database/database.sqlite');
+}
+if (!getenv('APP_KEY') && !isset($_ENV['APP_KEY'])) {
+    putenv('APP_KEY=base64:7XW0vXQFQ25jZ3VPQWxRZ0g5R2dvbE95cU5oT212S0VrZ1k=');
+    $_ENV['APP_KEY'] = 'base64:7XW0vXQFQ25jZ3VPQWxRZ0g5R2dvbE95cU5oT212S0VrZ1k=';
+}
 putenv('DB_CONNECTION=sqlite');
 putenv('DB_DATABASE=' . __DIR__ . '/database/database.sqlite');
 putenv('SESSION_DRIVER=array');
@@ -95,6 +102,11 @@ file_put_contents($docsDir . '/sitemap.xml', $sitemapXml);
 // Copy robots.txt with updated sitemap URL
 $robots = "User-agent: *\nAllow: /\n\nSitemap: https://ibrahimkhalif5.github.io/ibrahim-khalif-portfolio/sitemap.xml\n";
 file_put_contents($docsDir . '/robots.txt', $robots);
+
+// Copy the live admin upload page
+if (file_exists(__DIR__ . '/public/admin.html')) {
+    copy(__DIR__ . '/public/admin.html', $docsDir . '/admin.html');
+}
 
 echo "Static build complete: docs/\n";
 echo "Files created:\n";

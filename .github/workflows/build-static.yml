@@ -1,0 +1,64 @@
+name: Build static site
+
+on:
+  push:
+    branches: [master]
+    paths-ignore:
+      - 'docs/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-static
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, dom, fileinfo, pdo_sqlite, gd
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress --no-scripts
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Prepare env
+        run: |
+          cp .env.example .env
+          php artisan key:generate --force
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Build static site
+        run: php build-static.php
+
+      - name: Commit built site
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A docs/
+          if git diff --cached --quiet; then
+            echo "No changes to docs/ — nothing to commit."
+          else
+            git commit -m "Rebuild static site [ci skip]"
+            git push
+          fi

@@ -9,7 +9,7 @@
                         </h3>
                         <p class="text-accent font-mono text-sm">
                             {{ $item['institution'] }}
-                            <span class="text-text-tertiary"> — {{ $item['location'] }}</span>
+                            <span class="text-text-tertiary">, {{ $item['location'] }}</span>
                         </p>
                     </div>
                     <div class="flex flex-col items-start sm:items-end gap-1 shrink-0">

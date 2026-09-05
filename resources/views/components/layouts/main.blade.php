@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 <head>
     <meta charset="utf-8">
@@ -24,7 +24,7 @@
     <meta property="og:description" content="{{ $pageDescription }}">
     <meta property="og:site_name" content="{{ $seo['site_name'] ?? '' }}">
     <meta property="og:image" content="{{ $ogImage }}">
-    <meta property="og:image:alt" content="Portfolio of Ibrahim Khalif Ali — Software Engineer & AI Student">
+    <meta property="og:image:alt" content="Portfolio of Ibrahim Khalif Ali â€” Software Engineer & AI Student">
 
     {{-- Twitter / X --}}
     <meta name="twitter:card" content="summary_large_image">
@@ -34,7 +34,7 @@
     <meta name="twitter:title" content="{{ $pageTitle }}">
     <meta name="twitter:description" content="{{ $pageDescription }}">
     <meta name="twitter:image" content="{{ $ogImage }}">
-    <meta name="twitter:image:alt" content="Portfolio of Ibrahim Khalif Ali — Software Engineer & AI Student">
+    <meta name="twitter:image:alt" content="Portfolio of Ibrahim Khalif Ali â€” Software Engineer & AI Student">
 
     {{-- Favicon --}}
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">

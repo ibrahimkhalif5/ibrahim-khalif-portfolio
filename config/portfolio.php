@@ -5,31 +5,31 @@ return [
         'name' => 'Ibrahim Khalif Ali',
         'short_name' => 'Ibrahim',
         'email' => 'ibrahimkhalif5@gmail.com',
-        'tagline' => 'I build software systems that solve real-world problems.',
+        'tagline' => 'I build software systems that solve real world problems.',
         'role_line' => 'Software Engineer · ICT Professional',
         'hero_focus' => [
             ['icon' => 'code', 'label' => 'Production Systems', 'detail' => 'Revenue, healthcare, land registry, municipal'],
             ['icon' => 'graduation', 'label' => 'Software Engineering with AI', 'detail' => 'Centennial College, Canada'],
             ['icon' => 'map', 'label' => 'Based in Toronto', 'detail' => 'Open to Canadian opportunities'],
         ],
-        'summary' => "I've spent my career designing, building, and supporting software systems that run real organizations — county revenue platforms, hospital systems, land registries, and government web platforms. Now I'm deepening that foundation into modern software engineering and AI.",
-        'about_intro' => "I'm an ICT professional and software developer based in Toronto, currently studying Software Engineering with AI at Centennial College. I design, develop, deploy, and support software systems — mostly backend-heavy web applications that need to work reliably in production.",
-        'about_detail' => "Most of my work has been in the public and institutional space: government technology systems, revenue platforms, land registry tools, healthcare systems, and municipal websites. These are environments where the software has to handle real data, real users, and real consequences. That's where I learned to build things properly — not just get them running, but keep them running.",
-        'about_paragraph3' => "Over the past few years, my focus has shifted from maintaining existing systems toward building new ones with modern tools and practices. I work extensively with Laravel, Vue.js, PHP, Python, and MySQL, and I've been deepening my understanding of software architecture, API design, and cloud deployment. More recently, I've been exploring how artificial intelligence can be integrated into practical applications — not as a buzzword, but as a genuine tool for solving problems.",
-        'about_paragraph4' => "I'm drawn to software engineering because it rewards both discipline and curiosity. I want to build systems that are well-designed, maintainable, and actually useful — the kind of software that makes an organization run better, not just look modern.",
+        'summary' => "I've spent my career designing, building, and supporting software systems that run real organizations, county revenue platforms, hospital systems, land registries, and government web platforms. Now I'm deepening that foundation into modern software engineering and AI.",
+        'about_intro' => "I'm an ICT professional and software developer based in Toronto, currently studying Software Engineering with AI at Centennial College. I design, develop, deploy, and support software systems, mostly backend heavy web applications that need to work reliably in production.",
+        'about_detail' => "Most of my work has been in the public and institutional space: government technology systems, revenue platforms, land registry tools, healthcare systems, and municipal websites. These are environments where the software has to handle real data, real users, and real consequences. That's where I learned to build things properly, not just get them running, but keep them running.",
+        'about_paragraph3' => "Over the past few years, my focus has shifted from maintaining existing systems toward building new ones with modern tools and practices. I work extensively with Laravel, Vue.js, PHP, Python, and MySQL, and I've been deepening my understanding of software architecture, API design, and cloud deployment. More recently, I've been exploring how artificial intelligence can be integrated into practical applications, not as a buzzword, but as a genuine tool for solving problems.",
+        'about_paragraph4' => "I'm drawn to software engineering because it rewards both discipline and curiosity. I want to build systems that are well designed, maintainable, and actually useful, the kind of software that makes an organization run better, not just look modern.",
         'resume_url' => 'Ibrahim-Khalif-Ali-Resume.pdf',
         'resume_label' => 'Résumé',
         'open_to' => [
             'Software Engineer',
             'Backend Developer',
-            'Full-Stack Developer',
+            'Full Stack Developer',
             'AI / ML Roles',
             'Junior Software Engineering Roles',
         ],
         'interests' => [
             'Software Engineering',
             'Artificial Intelligence',
-            'Full-Stack Development',
+            'Full Stack Development',
             'Backend APIs',
             'Database Architecture',
             'Cloud Deployment',
@@ -38,7 +38,7 @@ return [
 
     'seo' => [
         'title' => 'Ibrahim Khalif Ali | Software Engineer & AI Student',
-        'description' => 'Ibrahim Khalif Ali is a software engineer and ICT professional specializing in full-stack development, Laravel, Vue.js, Python, databases and modern software engineering, currently studying Software Engineering with AI at Centennial College.',
+        'description' => 'Ibrahim Khalif Ali is a software engineer and ICT professional specializing in full stack development, Laravel, Vue.js, Python, databases and modern software engineering, currently studying Software Engineering with AI at Centennial College.',
         // TODO: Replace with the production domain, e.g. https://yourdomain.com
         'canonical' => 'https://yourdomain.com',
         'og_image' => '/images/og-cover.png',
@@ -64,12 +64,12 @@ return [
 
     'contact' => [
         'headline' => "Let's build something useful.",
-        'description' => "I'm a software engineer with real production experience in revenue, healthcare, and government systems, and I'm currently studying Software Engineering with AI. I'm open to software engineering, backend, full-stack, and AI-focused roles — as well as collaborative projects building practical systems that solve real-world problems.",
+        'description' => "I'm a software engineer with real production experience in revenue, healthcare, and government systems, and I'm currently studying Software Engineering with AI. I'm open to software engineering, backend, full stack, and AI focused roles, as well as collaborative projects building practical systems that solve real world problems.",
         'cta_text' => 'Get In Touch',
     ],
 
     'experience' => [
-        'lead' => "Production software that runs real organizations. My experience spans the design, development, and operation of systems relied on daily by public institutions — where correctness, reliability, and security are non-negotiable.",
+        'lead' => "Production software that runs real organizations. My experience spans the design, development, and operation of systems relied on daily by public institutions, where correctness, reliability, and security are non negotiable.",
         'items' => [
 
             [
@@ -78,13 +78,13 @@ return [
                 'department' => 'Department of Revenue Services',
                 'period' => null,
                 'bullets' => [
-                    'Managed and supported county-wide ICT systems, ensuring reliability across revenue collection, land registry, and municipal operations',
+                    'Managed and supported county wide ICT systems, ensuring reliability across revenue collection, land registry, and municipal operations',
                     'Designed and developed revenue management systems using Laravel and Vue.js to streamline tax collection and reporting',
                     'Deployed and configured POS terminals for revenue collection points, integrating M-Pesa and USSD payment channels',
                     'Administered databases and applications, managing MySQL instances serving government operations',
-                    'Built and maintained government web platforms for internal operations and public-facing services',
+                    'Built and maintained government web platforms for internal operations and public facing services',
                     'Provided technical support, user training, and troubleshooting for county staff across departments',
-                    'Integrated third-party payment systems and REST APIs to connect revenue operations with financial infrastructure',
+                    'Integrated third party payment systems and REST APIs to connect revenue operations with financial infrastructure',
                 ],
                 'technologies' => ['Laravel', 'Vue.js', 'PHP', 'MySQL', 'JavaScript', 'REST APIs', 'M-Pesa Integration', 'USSD', 'POS Systems', 'Cloud Deployment'],
             ],
@@ -183,7 +183,7 @@ return [
     ],
 
     'exploring' => [
-        'intro' => "I already have real-world software development experience, and I am now deliberately expanding into modern software engineering and AI. This is where my focus is right now.",
+        'intro' => "I already have real world software development experience, and I am now deliberately expanding into modern software engineering and AI. This is where my focus is right now.",
         'areas' => [
             [
                 'title' => 'Artificial Intelligence',
@@ -192,9 +192,9 @@ return [
                 'items' => [
                     'Artificial intelligence',
                     'Machine learning concepts',
-                    'AI-enabled applications',
+                    'AI enabled applications',
                     'Intelligent software systems',
-                    'Data-driven applications',
+                    'Data driven applications',
                 ],
             ],
             [
@@ -208,7 +208,7 @@ return [
                     'TypeScript',
                     'React',
                     'Next.js',
-                    'Cloud-based development',
+                    'Cloud based development',
                     'Software architecture',
                 ],
             ],
@@ -230,7 +230,7 @@ return [
     ],
 
     'projects' => [
-        'lead' => "These are production systems built for real organizations — not tutorials. They process real payments, manage real records, and serve real users daily. The featured projects below are live systems I designed, built, and deployed as part of professional ICT and government work.",
+        'lead' => "These are production systems built for real organizations, not tutorials. They process real payments, manage real records, and serve real users daily. The featured projects below are live systems I designed, built, and deployed as part of professional ICT and government work.",
         'items' => [
             [
                 'title' => 'Elwak Municipality Website',
@@ -254,7 +254,7 @@ return [
             ],
             [
                 'title' => 'Najdah Organization Website',
-                'description' => 'A multilingual organizational website supporting Arabic, English, and Turkish — built to serve a diverse international audience with content in multiple languages.',
+                'description' => 'A multilingual organizational website supporting Arabic, English, and Turkish, built to serve a diverse international audience with content in multiple languages.',
                 'category' => 'Web Development / Multilingual Platform',
                 'technologies' => ['PHP', 'JavaScript', 'HTML/CSS', 'MySQL'],
                 'url' => 'https://najdah.org/',
@@ -284,7 +284,7 @@ return [
             ],
             [
                 'title' => 'Teno Care Hospital System',
-                'description' => 'A hospital management system designed for a Level 3 hospital. Covers core operational modules including payments, triage, pharmacy, laboratory, radiology, and reporting — built to support clinical workflows and patient care operations.',
+                'description' => 'A hospital management system designed for a Level 3 hospital. Covers core operational modules including payments, triage, pharmacy, laboratory, radiology, and reporting, built to support clinical workflows and patient care operations.',
                 'category' => 'Healthcare / Enterprise Software',
                 'technologies' => ['PHP', 'MySQL', 'JavaScript', 'HTML/CSS'],
                 'url' => null,

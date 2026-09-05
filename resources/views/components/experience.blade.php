@@ -15,7 +15,7 @@
                         <p class="text-accent font-mono text-sm">
                             {{ $item['company'] }}
                             @if(isset($item['department']))
-                                <span class="text-text-tertiary"> — {{ $item['department'] }}</span>
+                                <span class="text-text-tertiary">, {{ $item['department'] }}</span>
                             @endif
                         </p>
                     </div>

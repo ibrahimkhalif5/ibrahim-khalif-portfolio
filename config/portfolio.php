@@ -2,7 +2,7 @@
 
 return [
     'personal' => [
-        'name' => 'Ibrahim Khalif Ali',
+        'name' => 'Ibrahim Khalif',
         'short_name' => 'Ibrahim',
         'email' => 'ibrahimkhalif5@gmail.com',
         'tagline' => 'I build software systems that solve real world problems.',
@@ -37,13 +37,13 @@ return [
     ],
 
     'seo' => [
-        'title' => 'Ibrahim Khalif Ali | Software Engineer & AI Student',
+        'title' => 'Ibrahim Khalif | Software Engineer & AI Student',
         'description' => 'Ibrahim Khalif Ali is a software engineer and ICT professional specializing in full stack development, Laravel, Vue.js, Python, databases and modern software engineering, currently studying Software Engineering with AI at Centennial College.',
         // TODO: Replace with the production domain, e.g. https://yourdomain.com
         'canonical' => 'https://yourdomain.com',
         'og_image' => '/images/og-cover.png',
         'twitter_handle' => '',
-        'site_name' => 'Ibrahim Khalif Ali',
+        'site_name' => 'Ibrahim Khalif',
     ],
 
     'nav' => [

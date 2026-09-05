@@ -86,7 +86,7 @@ return [
                     'Provided technical support, user training, and troubleshooting for county staff across departments',
                     'Integrated third party payment systems and REST APIs to connect revenue operations with financial infrastructure',
                 ],
-                'technologies' => ['Laravel', 'Vue.js', 'PHP', 'MySQL', 'JavaScript', 'REST APIs', 'M-Pesa Integration', 'USSD', 'POS Systems', 'Cloud Deployment'],
+                'technologies' => ['Laravel', 'Vue.js', 'PHP', 'MySQL', 'JavaScript', 'REST APIs', 'POS Systems', 'Cloud Deployment'],
             ],
         ],
     ],
@@ -125,7 +125,6 @@ return [
                 'skills' => [
                     ['name' => 'PHP', 'url' => null],
                     ['name' => 'JavaScript', 'url' => null],
-                    ['name' => 'TypeScript', 'url' => null],
                     ['name' => 'Python', 'url' => 'https://python.org'],
                     ['name' => 'SQL', 'url' => null],
                     ['name' => 'HTML', 'url' => null],
@@ -138,8 +137,8 @@ return [
                     ['name' => 'Laravel', 'url' => 'https://laravel.com'],
                     ['name' => 'Vue.js', 'url' => 'https://vuejs.org'],
                     ['name' => 'Django', 'url' => 'https://djangoproject.com'],
-                    ['name' => 'React', 'url' => 'https://react.dev'],
-                    ['name' => 'Next.js', 'url' => 'https://nextjs.org'],
+                    ['name' => 'Flutter', 'url' => 'https://flutter.dev'],
+                    ['name' => 'Bootstrap', 'url' => 'https://getbootstrap.com'],
                 ],
             ],
             [
@@ -156,8 +155,6 @@ return [
                     ['name' => 'Axios', 'url' => null],
                     ['name' => 'Laravel API', 'url' => null],
                     ['name' => 'Django REST Framework', 'url' => null],
-                    ['name' => 'M-Pesa Integrations', 'url' => null],
-                    ['name' => 'USSD Integrations', 'url' => null],
                 ],
             ],
             [
@@ -171,9 +168,16 @@ return [
                 ],
             ],
             [
+                'name' => 'Data Analysis',
+                'skills' => [
+                    ['name' => 'Python', 'url' => 'https://python.org'],
+                    ['name' => 'R', 'url' => 'https://www.r-project.org'],
+                    ['name' => 'Power BI', 'url' => null],
+                ],
+            ],
+            [
                 'name' => 'Other',
                 'skills' => [
-                    ['name' => 'Power BI', 'url' => null],
                     ['name' => 'AI / ML Fundamentals', 'url' => null],
                     ['name' => 'Software Engineering', 'url' => null],
                     ['name' => 'System Administration', 'url' => null],
@@ -205,9 +209,6 @@ return [
                     'Python',
                     'Django',
                     'REST APIs',
-                    'TypeScript',
-                    'React',
-                    'Next.js',
                     'Cloud based development',
                     'Software architecture',
                 ],
@@ -266,7 +267,7 @@ return [
                 'title' => 'Mandera Revenue Collection Management System',
                 'description' => 'A revenue management platform used for county revenue operations. Developed and supported as part of county ICT infrastructure, handling payment processing, POS integration, USSD channels, and comprehensive financial reporting.',
                 'category' => 'Government / Revenue Technology',
-                'technologies' => ['Laravel', 'Vue.js', 'MySQL', 'M-Pesa', 'USSD', 'POS', 'REST APIs', 'Reporting'],
+                'technologies' => ['Laravel', 'Vue.js', 'MySQL', 'POS', 'REST APIs', 'Reporting'],
                 'url' => 'https://manderarcms.co.ke/login',
                 'github' => null,
                 'featured' => true,
